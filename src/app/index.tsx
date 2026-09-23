@@ -1,98 +1,168 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  useWindowDimensions,
+} from 'react-native';
 
 export default function HomeScreen() {
+  const { width } = useWindowDimensions();
+
+  // Chiều rộng vùng giao diện, chừa 20px hai bên
+  const contentWidth = width - 20;
+
+  // Chiều cao các ô theo đúng tỷ lệ trong ảnh
+  const topHeight = contentWidth * 0.40;
+  const middleHeight = contentWidth * 0.40;
+  const bottomHeight = contentWidth * 0.344;
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={[styles.container, { width: contentWidth }]}>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        {/* HÀNG 1: Ô 1 + Ô 2 */}
+        <View style={[styles.row, { height: topHeight }]}>
+          <View style={[styles.box, styles.box1]}>
+            <Text style={styles.numberWhite}>1</Text>
+          </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <View style={[styles.box, styles.box2]}>
+            <Text style={styles.numberWhite}>2</Text>
+          </View>
+        </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        {/* HÀNG 2: Ô 3 + Ô 4 + Ô 5 */}
+        <View
+          style={[
+            styles.row,
+            styles.middleRow,
+            { height: middleHeight },
+          ]}
+        >
+          <View style={[styles.box, styles.box3]}>
+            <Text style={styles.numberBlack}>3</Text>
+          </View>
+
+          <View style={[styles.box, styles.box4]}>
+            <Text style={styles.numberWhite}>4</Text>
+          </View>
+
+          <View style={[styles.box, styles.box5]}>
+            <Text style={styles.numberWhite}>5</Text>
+          </View>
+        </View>
+
+        {/* HÀNG 3: Ô 6 */}
+        <View
+          style={[
+            styles.box,
+            styles.box6,
+            { height: bottomHeight },
+          ]}
+        >
+          <Text style={styles.numberWhite}>6</Text>
+        </View>
+
+        {/* HỌ VÀ TÊN - MSSV */}
+        <View style={styles.studentContainer}>
+          <Text style={styles.studentText}>
+            Phạm Tuấn Anh - BIT 240012
+          </Text>
+        </View>
+
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    backgroundColor: '#FFFFFF',
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  container: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    alignSelf: 'center',
+    paddingTop: 10,
   },
-  title: {
-    textAlign: 'center',
+
+  row: {
+    flexDirection: 'row',
+    gap: 10,
   },
-  code: {
-    textTransform: 'uppercase',
+
+  middleRow: {
+    marginTop: 10,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  box: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Ô 1
+  box1: {
+    flex: 1,
+    backgroundColor: '#1976F3',
+  },
+
+  // Ô 2
+  box2: {
+    flex: 1,
+    backgroundColor: '#F5363C',
+  },
+
+  // Ô 3
+  box3: {
+    flex: 0.9,
+    backgroundColor: '#FFD719',
+  },
+
+  // Ô 4
+  box4: {
+    flex: 0.6,
+    backgroundColor: '#27AE60',
+  },
+
+  // Ô 5 rộng gấp đôi ô 3 và ô 4
+  box5: {
+    flex: 2,
+    backgroundColor: '#813CE6',
+  },
+
+  // Ô 6
+  box6: {
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#FF7514',
+  },
+
+  numberWhite: {
+    color: '#FFFFFF',
+    fontSize: 58,
+    fontWeight: '700',
+  },
+
+  numberBlack: {
+    color: '#000000',
+    fontSize: 58,
+    fontWeight: '700',
+  },
+
+  studentContainer: {
+    position: 'absolute',
+    bottom: 90,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+
+  studentText: {
+    color: '#444444',
+    fontSize: 18,
+    fontWeight: '500',
   },
 });
